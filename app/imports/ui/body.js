@@ -16,12 +16,22 @@ Template.body.onCreated(function bodyOnCreated () {
 Template.body.helpers({
   tasks () {
     const instance = Template.instance();
+    const filter = {};
+
+    let search = instance.state.get('search');
+
     if (instance.state.get('hideCompleted')) {
       // If hide completed is checked, filter tasks
-      return Tasks.find({checked: {$ne: true}}, {sort: {createdAt: -1}});
+      filter.checked = {$ne: true};
     }
+
+    if (search) {
+      //If search is found, filter search
+      filter.text = {$regex: search, $options: 'gi'};
+    }
+
     // Otherwise, return all of the tasks
-    return Tasks.find({}, {sort: {createdAt: -1}});
+    return Tasks.find(filter, {sort: {createdAt: -1}});
   },
 
   incompleteCount () {
@@ -30,7 +40,7 @@ Template.body.helpers({
 });
 
 Template.body.events({
-  'submit .new-task' (event) {
+  'submit #formInsert' (event) {
     // Prevent default browser form submit
     event.preventDefault();
 
@@ -50,6 +60,16 @@ Template.body.events({
 
     // Clear form
     target.text.value = '';
+  },
+
+  'input [name=search]' (event, instance) {
+    // Prevent default browser form submit
+    event.preventDefault();
+
+    // Get value from form element
+    const search = event.target.value;
+
+    instance.state.set('search', search);
   },
 
   'change .hide-completed input' (event, instance) {

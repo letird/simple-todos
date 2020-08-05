@@ -10,8 +10,12 @@
 
     {{> loginButtons}}
 
+    <form id="formSearch" class="new-task">
+      <input type="search" name="search" placeholder="Type to search for a task"/>
+    </form>
+
     {{#if currentUser}}
-      <form class="new-task">
+      <form id="formInsert" class="new-task">
         <input type="text" name="text" placeholder="Type to add new tasks"/>
       </form>
     {{/if}}
