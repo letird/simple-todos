@@ -31,7 +31,7 @@ Template.body.helpers({
     }
 
     // Otherwise, return all of the tasks
-    return Tasks.find(filter, {sort: {createdAt: -1}});
+    return Tasks.find(filter, {sort: {previsao: 1}});
   },
 
   incompleteCount () {
@@ -47,19 +47,13 @@ Template.body.events({
     // Get value from form element
     const target = event.target;
     const text = target.text.value;
+    const previsao = new Date(target.data.value);
 
-    Meteor.call('tasks.insert', text);
-
-    // Insert a task into the collection
-    Tasks.insert({
-      text,
-      createdAt: new Date(), // current time
-      owner: Meteor.userId(),
-      username: Meteor.user().username,
-    });
+    Meteor.call('tasks.insert', text, previsao);
 
     // Clear form
     target.text.value = '';
+    target.data.value = '';
   },
 
   'input [name=search]' (event, instance) {

@@ -16,7 +16,11 @@
 
     {{#if currentUser}}
       <form id="formInsert" class="new-task">
-        <input type="text" name="text" placeholder="Type to add new tasks"/>
+        <div style="display: flex">
+          <input type="text" name="text" placeholder="Type to add new tasks"/>
+          <input type="date" name="data" placeholder="previsao"/>
+        </div>
+        <button type="submit">Salvar</button>
       </form>
     {{/if}}
 
